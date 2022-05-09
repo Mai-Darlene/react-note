@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>state</title>
+</head>
+<body>
+<!--准备好一个容器-->
+<div id="test"></div>
+
+<!--引入React核心库-->
+<script type="text/javascript" src="../js/16.8.0/react.development.js"></script>
+<!--引入React-dom，用于支持react操作Dom-->
+<script type="text/javascript" src="../js/16.8.0/react-dom.development.js"></script>
+<!--引入babel，用于讲jsx转为js-->
+<script type="text/javascript" src="../js/16.8.0/babel.min.js"></script>
+
+<script type="text/babel"> /* 此处一定要写babel */
+
+class Weather extends React.Component {
+  // 初始化狀態
+  state = {
+    isHot: true
+  }
+  render() {
+    return <h1 onClick={this.switchWeather}>今天天气很{this.state.isHot ? '炎热' : '凉爽'}</h1>
+  }
+  //自定义方法---要用复制语句的形式+箭头函数
+  switchWeather = () => {
+
+    this.setState({isHot: !this.state.isHot})
+  }
+}
+//2.渲染组件到页面
+ReactDOM.render(<Weather/>, document.getElementById('test'))
+
+</script>
+</body>
+</html>

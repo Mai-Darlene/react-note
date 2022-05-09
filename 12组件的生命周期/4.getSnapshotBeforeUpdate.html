@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .list{
+            background-color: skyblue;
+            width: 300px;
+            height: 150px;
+            overflow: auto;
+        }
+        .item{
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+<div id="test"></div>
+<!--引入React核心库-->
+<script type="text/javascript" src="../js/17.0.2/react.development.js"></script>
+<!--引入React-dom，用于支持react操作Dom-->
+<script type="text/javascript" src="../js/17.0.2/react-dom.development.js"></script>
+<!--引入babel，用于讲jsx转为js-->
+<script type="text/javascript" src="../js/17.0.2/babel.js"></script>
+
+<script type="text/babel"> /* 此处一定要写babel */
+/*
+*       1.初始化阶段： 由ReactDOM.render()触发----初次渲染
+*           1.  constructor()
+*           2.  getDerivedStateFromProps()
+*           3.  render()
+*           4.componentDidMount()
+*       2.更新阶段：由组件内部this.setState()或父组件重新render触发
+*           1.  getDerivedStateFromProps()
+*           2.  shouldComponentUpdate()
+*           3.  render()
+*           4.  getSnapshotBeforeUpdate()
+*           5.  componentDidUpdate()
+*       3.卸载组件： 由ReactDOM.unmountComponentAtNode()释放
+*           1.componentWillUnmount()
+*
+*
+* */
+class News extends React.Component{
+    state = {newsArr:[]}
+    componentDidMount(){
+        setInterval(() => {
+            //获取原状态
+            const {newsArr} = this.state
+            //模拟一条新闻
+            const news = '新闻' + (newsArr.length+1)
+            //更新状态
+            this.setState({newsArr:[news, ...newsArr]})
+        },1000)
+    }
+    getSnapshotBeforeUpdate() {
+        return this.refs.list.scrollHeight
+    }
+    componentDidUpdate(preProps,preState, height) {
+        this.refs.list.scrollTop += this.refs.list?.scrollHeight - height
+    }
+    render() {
+        return(
+            <div className="list" ref="list">
+                {
+                    this.state.newsArr.map((n,index) => {
+                        return <div className="item" key={index}>{n}</div>
+                    })
+                }
+            </div>
+        )
+    }
+}
+ReactDOM.render(<News/>,document.getElementById('test'))
+</script>
+</body>
+</html>
